@@ -8,10 +8,26 @@ import {
 import { DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { User } from "@/db/schemas/users";
 import { PlusIcon } from "lucide-react";
 import { createProperty } from "../actions";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-export function CreatePropertyDialog() {
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type CreatePropertyDialogProps = {
+  managers: User[];
+  accountants: User[];
+};
+
+export function CreatePropertyDialog({
+  managers,
+  accountants,
+}: CreatePropertyDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -52,20 +68,56 @@ export function CreatePropertyDialog() {
 
           <div className="grid gap-2">
             <Label htmlFor="propertyManager">Property manager</Label>
-            <Input
-              id="propertyManager"
-              name="propertyManager"
-              placeholder="Assign property manager"
-            />
+            <Select name="propertyManager">
+              <SelectTrigger id="propertyManager">
+                <SelectValue
+                  placeholder={
+                    managers.length ? "Select manager" : "No managers available"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {managers.length ? (
+                  managers.map((manager) => (
+                    <SelectItem key={manager.id} value={manager.id}>
+                      {manager.name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-manager" disabled>
+                    No managers available
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="accountant">Accountant</Label>
-            <Input
-              id="accountant"
-              name="accountant"
-              placeholder="Assign accountant"
-            />
+            <Select name="accountant">
+              <SelectTrigger id="accountant">
+                <SelectValue
+                  placeholder={
+                    accountants.length
+                      ? "Select accountant"
+                      : "No accountants available"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {accountants.length ? (
+                  accountants.map((accountant) => (
+                    <SelectItem key={accountant.id} value={accountant.id}>
+                      {accountant.name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-accountant" disabled>
+                    No accountants available
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid gap-2">

@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getUserNameById } from "../actions";
 
 type PropertiesTableProps = {
   properties: Property[];
@@ -32,8 +33,12 @@ const PropertiesTable = ({ properties }: PropertiesTableProps) => {
           <TableRow key={property.id}>
             <TableCell className="font-medium">{property.name}</TableCell>
             <TableCell className="uppercase">{property.type}</TableCell>
-            <TableCell>{property.managerId ?? "—"}</TableCell>
-            <TableCell>{property.accountantId ?? "—"}</TableCell>
+            <TableCell>
+              {getUserNameById(property.managerId as string)}
+            </TableCell>
+            <TableCell>
+              {getUserNameById(property.accountantId as string)}
+            </TableCell>
             <TableCell>{formatDate(property.createdAt ?? null)}</TableCell>
           </TableRow>
         ))}
