@@ -3,7 +3,7 @@ import db from "@/db";
 import { properties } from "@/db/schemas/properties";
 import { users, type User } from "@/db/schemas/users";
 import { eq, inArray } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 export const fetchProperties = async () => {
   const propertiesData = await db.select().from(properties);
   return propertiesData;
@@ -25,28 +25,23 @@ export const fetchManagersAndAccountants = async (): Promise<{
 };
 
 export const createProperty = async (formData: FormData): Promise<void> => {
-  console.log("Creating property", formData);
-  try {
-    const managerId = formData.get("propertyManager");
-    const accountantId = formData.get("accountant");
-    const declarationUrl = "Mocked for now";
-    const propertyName = formData.get("propertyName") as string;
-    const propertyType = formData.get("type") as "WEG" | "MV";
-    //const declaration = formData.get("divisionDeclaration");
+  const managerId = formData.get("propertyManager");
+  const accountantId = formData.get("accountant");
+  const propertyName = formData.get("propertyName") as string;
+  const propertyType = formData.get("type") as "WEG" | "MV";
 
-    await db.insert(properties).values({
+  const [property] = await db
+    .insert(properties)
+    .values({
       name: propertyName,
       type: propertyType,
       managerId: managerId ? String(managerId) : null,
       accountantId: accountantId ? String(accountantId) : null,
-      declarationUrl,
-    });
+      declarationUrl: "Mocked for now",
+    })
+    .returning();
 
-    revalidatePath("/");
-  } catch (error) {
-    console.error("Error creating property", error);
-    throw new Error("Failed to create property");
-  }
+  redirect(`/property/${property.id}`);
 };
 
 export const getUserNameById = async (id: string): Promise<string> => {

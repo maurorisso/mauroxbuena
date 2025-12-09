@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import {
   DialogDescription,
@@ -6,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/db/schemas/users";
@@ -18,6 +22,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useFormStatus } from "react-dom";
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? <Spinner className="size-4" /> : "Create Property"}
+    </Button>
+  );
+}
 
 type CreatePropertyDialogProps = {
   managers: User[];
@@ -138,7 +153,7 @@ export function CreatePropertyDialog({
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit">Create Property</Button>
+            <SubmitButton />
           </DialogFooter>
         </form>
       </DialogContent>

@@ -43,8 +43,8 @@ export default async function Home() {
               </EmptyHeader>
               <EmptyContent>
                 <CreatePropertyDialog
-                  managers={managers}
-                  accountants={accountants}
+                  managers={staff.managers}
+                  accountants={staff.accountants}
                 />
               </EmptyContent>
             </Empty>
