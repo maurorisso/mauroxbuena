@@ -1,7 +1,7 @@
 import { pgTable, uuid, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
 
 export const propertyTypeEnum = pgEnum("property_type", ["WEG", "MV"]);
-
+  
 export const properties = pgTable("properties", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),

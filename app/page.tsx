@@ -9,14 +9,19 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { HouseHeart } from "lucide-react";
+import { HouseHeart, PlusIcon } from "lucide-react";
+import CreatePropertyDialog from "./components/create-property-dialog";
 
 export default async function Home() {
   const properties = await fetchProperties();
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className=" min-h-screen w-full container flex-col   py-32 px-16 gap-4 flex">
-        <h1 className="text-2xl font-bold">Properties</h1>
+        <div className="flex items-center justify-between">
+          {" "}
+          <h1 className="text-2xl font-bold">Properties</h1>
+          <CreatePropertyDialog />
+        </div>
         <div className="w-full rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           {properties.length > 0 ? (
             <PropertiesTable properties={properties} />
@@ -33,9 +38,7 @@ export default async function Home() {
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
-                <div className="flex gap-2">
-                  <Button>Create Property</Button>
-                </div>
+                <CreatePropertyDialog />
               </EmptyContent>
             </Empty>
           )}{" "}
