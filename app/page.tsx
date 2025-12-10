@@ -1,5 +1,5 @@
 import { fetchManagersAndAccountants, fetchProperties } from "./actions";
-import PropertiesTable from "./components/properties-table";
+import PropertiesList from "./components/properties-list";
 import {
   Empty,
   EmptyContent,
@@ -28,7 +28,7 @@ export default async function Home() {
         </div>
         <div className="w-full rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           {properties.length > 0 ? (
-            <PropertiesTable properties={properties} />
+            <PropertiesList properties={properties} />
           ) : (
             <Empty>
               <EmptyHeader>
