@@ -1,6 +1,8 @@
 "use server";
 import db from "@/db";
+import { buildings } from "@/db/schemas/buildings";
 import { properties } from "@/db/schemas/properties";
+import { units } from "@/db/schemas/units";
 import { users, type User } from "@/db/schemas/users";
 import { eq, inArray } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -47,4 +49,14 @@ export const createProperty = async (formData: FormData): Promise<void> => {
 export const getUserNameById = async (id: string): Promise<string> => {
   const user = await db.select().from(users).where(eq(users.id, id));
   return user?.[0]?.name ?? "Unknown";
+};
+
+export const getUnitsByPropertyId = async (propertyId: string) => {
+  const unitsData = await db
+    .select({ units })
+    .from(units)
+    .innerJoin(buildings, eq(units.buildingId, buildings.id))
+    .where(eq(buildings.propertyId, propertyId));
+
+  return unitsData.map((item) => item.units);
 };

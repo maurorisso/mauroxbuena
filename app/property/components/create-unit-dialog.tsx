@@ -40,8 +40,13 @@ export function CreateUnitDialog({ buildingId }: CreateUnitDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <PlusIcon className="mr-2 h-4 w-4" /> Add Unit
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-1 rounded-md"
+        >
+          <PlusIcon className="h-4 w-4" />
+          <span>Add Unit</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
@@ -99,21 +104,12 @@ export function CreateUnitDialog({ buildingId }: CreateUnitDialogProps) {
 
           <div className="grid gap-2">
             <Label htmlFor="floor">Floor</Label>
-            <Input
-              id="floor"
-              name="floor"
-              type="number"
-              placeholder="e.g. 2"
-            />
+            <Input id="floor" name="floor" type="number" placeholder="e.g. 2" />
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="entrance">Entrance</Label>
-            <Input
-              id="entrance"
-              name="entrance"
-              placeholder="e.g. A, B"
-            />
+            <Input id="entrance" name="entrance" placeholder="e.g. A, B" />
           </div>
 
           <div className="grid gap-2">
@@ -163,4 +159,3 @@ export function CreateUnitDialog({ buildingId }: CreateUnitDialogProps) {
 }
 
 export default CreateUnitDialog;
-

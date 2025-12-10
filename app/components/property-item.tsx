@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Building2, UserCog, Calculator, Calendar } from "lucide-react";
 import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 
 type PropertyItemProps = {
   property: Property & {
@@ -26,14 +27,13 @@ const PropertyItem = ({ property }: PropertyItemProps) => {
       <Card className="hover:shadow-md transition-shadow">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 flex items-center gap-2">
               <CardTitle className="text-lg font-semibold leading-tight mb-1">
                 {property.name}
               </CardTitle>
-              <CardDescription className="flex items-center gap-1.5 text-xs uppercase tracking-wide">
-                <Building2 className="h-3.5 w-3.5" />
+              <Badge className="text-xs" variant="outline">
                 {property.type}
-              </CardDescription>
+              </Badge>
             </div>
           </div>
         </CardHeader>

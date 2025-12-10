@@ -7,7 +7,7 @@ import { units } from "@/db/schemas/units";
 import { properties } from "@/db/schemas/properties";
 
 export const fetchPropertyById = async (id: string) => {
-  const property = await db
+  const [property] = await db
     .select()
     .from(properties)
     .where(eq(properties.id, id));

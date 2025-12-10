@@ -36,7 +36,8 @@ export function CreateBuildingDialog({
     <Dialog>
       <DialogTrigger asChild>
         <Button>
-          <PlusIcon className="mr-2 h-4 w-4" /> Add Building
+          <PlusIcon className="h-4 w-4" />
+          <span>Create Building</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -77,20 +78,12 @@ export function CreateBuildingDialog({
 
           <div className="grid gap-2">
             <Label htmlFor="zipCode">Zip Code</Label>
-            <Input
-              id="zipCode"
-              name="zipCode"
-              placeholder="e.g. 12345"
-            />
+            <Input id="zipCode" name="zipCode" placeholder="e.g. 12345" />
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="city">City</Label>
-            <Input
-              id="city"
-              name="city"
-              placeholder="e.g. Berlin"
-            />
+            <Input id="city" name="city" placeholder="e.g. Berlin" />
           </div>
 
           <DialogFooter className="flex justify-between w-full">
@@ -108,4 +101,3 @@ export function CreateBuildingDialog({
 }
 
 export default CreateBuildingDialog;
-

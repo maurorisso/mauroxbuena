@@ -1,8 +1,13 @@
 import { getBuildingsByPropertyId, getUnitsByBuildingId } from "../../actions";
 import BuildingsItem from "../buildings-item";
 import { CreateBuildingDialog } from "../create-building-dialog";
-const BuildingsTab = async ({ propertyId }: { propertyId: string }) => {
-  const buildings = await getBuildingsByPropertyId(propertyId);
+import { Building } from "@/db/schemas/buildings";
+type BuildingsTabProps = {
+  buildings: Building[];
+  propertyId: string;
+};
+
+const BuildingsTab = async ({ buildings, propertyId }: BuildingsTabProps) => {
   const buildingsWithUnits = await Promise.all(
     buildings.map(async (building) => {
       const units = await getUnitsByBuildingId(building.id);
@@ -16,9 +21,20 @@ const BuildingsTab = async ({ propertyId }: { propertyId: string }) => {
         <CreateBuildingDialog propertyId={propertyId} />
       </div>
       <div className="flex flex-col gap-4 w-full">
-        {buildingsWithUnits.map(({ building, units }) => (
-          <BuildingsItem key={building.id} building={building} units={units} />
-        ))}
+        {buildingsWithUnits.length > 0 ? (
+          buildingsWithUnits.map((building) => (
+            <BuildingsItem
+              key={building.building.id}
+              building={building.building}
+              units={building.units}
+            />
+          ))
+        ) : (
+          <div className="text-sm text-muted-foreground rounded-lg border p-4 bg-white flex flex-col gap-2 items-center justify-center">
+            <p> No buildings found</p>
+            <p>Create a new building to get started</p>
+          </div>
+        )}
       </div>
     </div>
   );

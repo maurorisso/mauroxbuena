@@ -32,14 +32,13 @@ const BuildingsItem = ({
           <MapPin className="w-4 h-4" /> {building.zipCode} {building.city}
         </div>
 
-        <div className="text-sm font-medium mt-2 text-muted-foreground">
-          Units
-        </div>
-        <div className="flex flex-col gap-2">
-          {buildingUnits.map((unit) => (
-            <UnitsItem key={unit.id} unit={unit} />
-          ))}
-        </div>
+        {buildingUnits.length > 0 && (
+          <div className="flex flex-col gap-2">
+            {buildingUnits.map((unit) => (
+              <UnitsItem key={unit.id} unit={unit} />
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

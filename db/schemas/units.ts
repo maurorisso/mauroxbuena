@@ -34,3 +34,6 @@ export const units = pgTable("units", {
   constructionYear: integer("construction_year"),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+export type Unit = typeof units.$inferSelect;
+export type NewUnit = typeof units.$inferInsert;
