@@ -6,6 +6,17 @@ import { units } from "@/db/schemas/units";
 import { users, type User } from "@/db/schemas/users";
 import { eq, inArray } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
+import { v4 as uuidv4 } from "uuid";
+
+// Strip accents and unsafe characters so Supabase storage keys stay valid
+const sanitizeFileName = (name: string) =>
+  name
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9.\-_]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "");
 export const fetchProperties = async () => {
   const propertiesData = await db.select().from(properties);
   return propertiesData;
@@ -31,15 +42,46 @@ export const createProperty = async (formData: FormData): Promise<void> => {
   const accountantId = formData.get("accountant");
   const propertyName = formData.get("propertyName") as string;
   const propertyType = formData.get("type") as "WEG" | "MV";
+  const divisionDeclarationFile = formData.get(
+    "divisionDeclaration"
+  ) as File | null;
+
+  let fileUrl = null;
+  const propertyId = uuidv4();
+
+  if (divisionDeclarationFile && divisionDeclarationFile.size > 0) {
+    // Unique filename to prevent overwrites
+    const safeName = sanitizeFileName(divisionDeclarationFile.name);
+    const fileName = `${Date.now()}-${safeName || "file"}`;
+    const storagePath = `${propertyId}/${fileName}`; // store file under the property folder
+
+    // 3. Upload to Supabase Storage
+    const supabase = await createClient();
+    const { data, error } = await supabase.storage
+      .from("reports")
+      .upload(storagePath, divisionDeclarationFile, {
+        contentType: divisionDeclarationFile.type,
+        upsert: false,
+      });
+
+    if (error) {
+      console.error("Upload failed:", error);
+      throw new Error("File upload failed");
+    }
+
+    fileUrl = data?.path ?? null;
+    console.log("File uploaded successfully:", fileUrl);
+  }
 
   const [property] = await db
     .insert(properties)
     .values({
+      id: propertyId,
       name: propertyName,
       type: propertyType,
       managerId: managerId ? String(managerId) : null,
       accountantId: accountantId ? String(accountantId) : null,
-      declarationUrl: "Mocked for now",
+      declarationUrl: fileUrl,
     })
     .returning();
 
