@@ -1,13 +1,16 @@
 "use server";
 
 import { buildings } from "@/db/schemas/buildings";
-import { fetchProperties } from "../actions";
 import db from "@/db";
 import { eq } from "drizzle-orm";
+import { units } from "@/db/schemas/units";
+import { properties } from "@/db/schemas/properties";
 
 export const fetchPropertyById = async (id: string) => {
-  const properties = await fetchProperties();
-  const property = properties.find((property) => property.id === id);
+  const property = await db
+    .select()
+    .from(properties)
+    .where(eq(properties.id, id));
   return property ?? null;
 };
 
@@ -37,4 +40,43 @@ export const getBuildingsByPropertyId = async (propertyId: string) => {
     .select()
     .from(buildings)
     .where(eq(buildings.propertyId, propertyId));
+};
+
+export const getUnitsByBuildingId = async (buildingId: string) => {
+  return await db.select().from(units).where(eq(units.buildingId, buildingId));
+};
+
+export const fetchUnits = async () => {
+  return await db.select().from(units);
+};
+
+export const createUnit = async (formData: FormData) => {
+  const buildingId = formData.get("buildingId");
+  const unitNumber = formData.get("unitNumber");
+  const type = formData.get("type");
+  const floor = formData.get("floor");
+  const entrance = formData.get("entrance");
+  const size = formData.get("size");
+  const coOwnershipShare = formData.get("coOwnershipShare");
+  const rooms = formData.get("rooms");
+  const constructionYear = formData.get("constructionYear");
+
+  const [unit] = await db
+    .insert(units)
+    .values({
+      buildingId: buildingId as string,
+      unitNumber: unitNumber as string,
+      type: type as "Apartment" | "Office" | "Garden" | "Parking",
+      floor: floor ? parseInt(floor as string) : null,
+      entrance: entrance ? (entrance as string) : null,
+      size: size as string,
+      coOwnershipShare: coOwnershipShare ? (coOwnershipShare as string) : null,
+      rooms: rooms ? (rooms as string) : null,
+      constructionYear: constructionYear
+        ? parseInt(constructionYear as string)
+        : null,
+    })
+    .returning();
+
+  return unit;
 };
