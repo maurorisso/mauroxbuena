@@ -2,11 +2,9 @@ import {
   pgTable,
   uuid,
   varchar,
-  text,
   timestamp,
   pgEnum,
   decimal,
-  real,
   integer,
 } from "drizzle-orm/pg-core";
 import { buildings } from "./buildings";
