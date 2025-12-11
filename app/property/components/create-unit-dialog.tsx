@@ -32,6 +32,130 @@ function SubmitButton() {
   );
 }
 
+function CancelButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <DialogClose asChild>
+      <Button variant="outline" type="button" disabled={pending}>
+        Cancel
+      </Button>
+    </DialogClose>
+  );
+}
+
+function FormFields() {
+  const { pending } = useFormStatus();
+
+  return (
+    <div className="grid gap-6">
+      {/* Basic Information */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-2 md:col-span-2">
+          <Label htmlFor="unitNumber">Unit Number *</Label>
+          <Input
+            id="unitNumber"
+            name="unitNumber"
+            placeholder="e.g. 1A, 2B"
+            required
+            disabled={pending}
+          />
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="type">Type *</Label>
+          <Select name="type" required disabled={pending}>
+            <SelectTrigger id="type">
+              <SelectValue placeholder="Select unit type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Apartment">Apartment</SelectItem>
+              <SelectItem value="Office">Office</SelectItem>
+              <SelectItem value="Garden">Garden</SelectItem>
+              <SelectItem value="Parking">Parking</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="size">Size (m²) *</Label>
+          <Input
+            id="size"
+            name="size"
+            type="number"
+            step="0.01"
+            placeholder="e.g. 75.50"
+            required
+            disabled={pending}
+          />
+        </div>
+      </div>
+
+      {/* Location Information */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-2">
+          <Label htmlFor="floor">Floor</Label>
+          <Input
+            id="floor"
+            name="floor"
+            type="number"
+            placeholder="e.g. 2"
+            disabled={pending}
+          />
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="entrance">Entrance</Label>
+          <Input
+            id="entrance"
+            name="entrance"
+            placeholder="e.g. A, B"
+            disabled={pending}
+          />
+        </div>
+      </div>
+
+      {/* Additional Details */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-2">
+          <Label htmlFor="rooms">Rooms</Label>
+          <Input
+            id="rooms"
+            name="rooms"
+            type="number"
+            step="0.5"
+            placeholder="e.g. 2.5"
+            disabled={pending}
+          />
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="constructionYear">Construction Year</Label>
+          <Input
+            id="constructionYear"
+            name="constructionYear"
+            type="number"
+            placeholder="e.g. 2020"
+            disabled={pending}
+          />
+        </div>
+
+        <div className="grid gap-2 md:col-span-2">
+          <Label htmlFor="coOwnershipShare">Co-ownership Share</Label>
+          <Input
+            id="coOwnershipShare"
+            name="coOwnershipShare"
+            type="number"
+            step="0.0001"
+            placeholder="e.g. 0.1234"
+            disabled={pending}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type CreateUnitDialogProps = {
   buildingId: string;
 };
@@ -49,7 +173,7 @@ export function CreateUnitDialog({ buildingId }: CreateUnitDialogProps) {
           <span>Add Unit</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[625px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create Unit</DialogTitle>
           <DialogDescription>
@@ -57,7 +181,7 @@ export function CreateUnitDialog({ buildingId }: CreateUnitDialogProps) {
           </DialogDescription>
         </DialogHeader>
         <form
-          className="space-y-4"
+          className="space-y-6"
           action={async (formData: FormData) => {
             await createUnit(formData);
             window.location.reload();
@@ -65,91 +189,10 @@ export function CreateUnitDialog({ buildingId }: CreateUnitDialogProps) {
         >
           <input type="hidden" name="buildingId" value={buildingId} />
 
-          <div className="grid gap-2">
-            <Label htmlFor="unitNumber">Unit Number *</Label>
-            <Input
-              id="unitNumber"
-              name="unitNumber"
-              placeholder="e.g. 1A, 2B"
-              required
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="type">Type *</Label>
-            <Select name="type" required>
-              <SelectTrigger id="type">
-                <SelectValue placeholder="Select unit type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Apartment">Apartment</SelectItem>
-                <SelectItem value="Office">Office</SelectItem>
-                <SelectItem value="Garden">Garden</SelectItem>
-                <SelectItem value="Parking">Parking</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="size">Size (m²) *</Label>
-            <Input
-              id="size"
-              name="size"
-              type="number"
-              step="0.01"
-              placeholder="e.g. 75.50"
-              required
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="floor">Floor</Label>
-            <Input id="floor" name="floor" type="number" placeholder="e.g. 2" />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="entrance">Entrance</Label>
-            <Input id="entrance" name="entrance" placeholder="e.g. A, B" />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="rooms">Rooms</Label>
-            <Input
-              id="rooms"
-              name="rooms"
-              type="number"
-              step="0.5"
-              placeholder="e.g. 2.5"
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="coOwnershipShare">Co-ownership Share</Label>
-            <Input
-              id="coOwnershipShare"
-              name="coOwnershipShare"
-              type="number"
-              step="0.0001"
-              placeholder="e.g. 0.1234"
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="constructionYear">Construction Year</Label>
-            <Input
-              id="constructionYear"
-              name="constructionYear"
-              type="number"
-              placeholder="e.g. 2020"
-            />
-          </div>
+          <FormFields />
 
           <DialogFooter className="flex justify-between w-full">
-            <DialogClose asChild>
-              <Button variant="outline" type="button">
-                Cancel
-              </Button>
-            </DialogClose>
+            <CancelButton />
             <SubmitButton />
           </DialogFooter>
         </form>

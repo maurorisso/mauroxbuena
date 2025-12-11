@@ -47,7 +47,7 @@ const UnitsItem = ({ unit }: { unit: typeof units.$inferSelect }) => {
             </div>
             <div className="text-sm text-muted-foreground flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              {unit.constructionYear}
+              {unit.constructionYear ? unit.constructionYear : "N/A"}
             </div>
           </div>
         </div>

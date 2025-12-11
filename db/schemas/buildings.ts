@@ -7,7 +7,7 @@ export const buildings = pgTable("buildings", {
     .references(() => properties.id, { onDelete: "cascade" })
     .notNull(),
   street: text("street").notNull(),
-  houseNumber: varchar("house_number", { length: 20 }).notNull(), // Varchar to support "12a"
+  houseNumber: varchar("house_number", { length: 100 }).notNull(), // Varchar to support "12a" or "26 / Trendelenburgstraße 17"
   zipCode: varchar("zip_code", { length: 20 }),
   city: text("city"),
   createdAt: timestamp("created_at").defaultNow(),

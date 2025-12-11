@@ -29,6 +29,13 @@
       "when": 1765386203025,
       "tag": "0003_black_night_nurse",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1765413550389,
+      "tag": "0004_lazy_valeria_richards",
+      "breakpoints": true
     }
   ]
 }

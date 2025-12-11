@@ -1,9 +1,17 @@
+"use client";
+
 import { buildings } from "@/db/schemas/buildings";
 import { units } from "@/db/schemas/units";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { MapPin, ChevronDown } from "lucide-react";
 import { CreateUnitDialog } from "./create-unit-dialog";
 import UnitsItem from "./units-item";
+import { Button } from "@/components/ui/button";
 
 const BuildingsItem = ({
   building,
@@ -33,11 +41,25 @@ const BuildingsItem = ({
         </div>
 
         {buildingUnits.length > 0 && (
-          <div className="flex flex-col gap-2">
-            {buildingUnits.map((unit) => (
-              <UnitsItem key={unit.id} unit={unit} />
-            ))}
-          </div>
+          <Collapsible className="mt-4" defaultOpen={true}>
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-between"
+              >
+                <span className="text-sm font-medium">View Units</span>
+                <ChevronDown className="h-4 w-4 transition-transform duration-200 data-[state=open]:rotate-180" />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="flex flex-col gap-2 mt-2">
+                {buildingUnits.map((unit) => (
+                  <UnitsItem key={unit.id} unit={unit} />
+                ))}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         )}
       </CardContent>
     </Card>

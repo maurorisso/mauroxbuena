@@ -6,11 +6,11 @@ type UnitsTabProps = {
 
 const UnitsTab = async ({ units }: UnitsTabProps) => {
   return (
-    <div className="flex flex-col gap-4 items-center justify-between w-full">
+    <div className="flex flex-col items-center justify-between w-full">
       <div className="flex items-center justify-between w-full">
         <h2 className="text-lg font-semibold">Units</h2>
       </div>
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-2 w-full mt-4">
         {units.length > 0 ? (
           units.map((unit) => <UnitsItem key={unit.id} unit={unit} />)
         ) : (

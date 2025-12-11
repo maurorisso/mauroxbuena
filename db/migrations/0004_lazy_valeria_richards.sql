@@ -1,0 +1,1 @@
+ALTER TABLE "buildings" ALTER COLUMN "house_number" SET DATA TYPE varchar(100);

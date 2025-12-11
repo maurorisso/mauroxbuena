@@ -33,11 +33,12 @@ let dbInstance: ReturnType<typeof drizzle> | null = null;
 
 function getDb() {
   if (!dbInstance) {
+    // Supabase connection strings already include SSL parameters in the URL
+    // Don't set ssl option explicitly to avoid conflicts
     const client = postgres(connectionString, {
       max: 1, // Single connection
       idle_timeout: 20, // Close after 20 seconds of inactivity
       connect_timeout: 10, // Increase timeout to 10 seconds for better reliability
-      ssl: "require",
       onnotice: () => {},
       prepare: false,
       connection: {

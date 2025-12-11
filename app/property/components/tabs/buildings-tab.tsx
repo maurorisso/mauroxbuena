@@ -15,8 +15,8 @@ const BuildingsTab = async ({ buildings, propertyId }: BuildingsTabProps) => {
     })
   );
   return (
-    <div className="flex flex-col gap-4 items-center justify-between w-full">
-      <div className="flex items-center justify-between w-full">
+    <div className="flex flex-col  items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full mb-4">
         <h2 className="text-lg font-semibold">Buildings</h2>
         <CreateBuildingDialog propertyId={propertyId} />
       </div>

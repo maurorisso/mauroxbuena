@@ -24,11 +24,11 @@ const formatDate = (date: Date) => format(date, "dd.MM.yyyy");
 const PropertyItem = ({ property }: PropertyItemProps) => {
   return (
     <Link href={`/property/${property.id}`}>
-      <Card className="hover:shadow-md transition-shadow">
+      <Card className="hover:shadow-sm transition-shadow shadow-none">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0 flex items-center gap-2">
-              <CardTitle className="text-lg font-semibold leading-tight mb-1">
+              <CardTitle className="text-lg font-semibold leading-tight mb-1 truncate">
                 {property.name}
               </CardTitle>
               <Badge className="text-xs" variant="outline">
