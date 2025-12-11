@@ -48,6 +48,7 @@ export const createProperty = async (formData: FormData): Promise<void> => {
 
   let fileUrl = null;
   const propertyId = uuidv4();
+  let publicUrl = null;
 
   if (divisionDeclarationFile && divisionDeclarationFile.size > 0) {
     // Unique filename to prevent overwrites
@@ -70,22 +71,64 @@ export const createProperty = async (formData: FormData): Promise<void> => {
     }
 
     fileUrl = data?.path ?? null;
+    publicUrl =
+      supabase.storage.from("reports").getPublicUrl(fileUrl).data?.publicUrl ??
+      null;
     console.log("File uploaded successfully:", fileUrl);
+
+    // Create property first
+    const [property] = await db
+      .insert(properties)
+      .values({
+        name: propertyName,
+        type: propertyType,
+        managerId: managerId ? String(managerId) : null,
+        accountantId: accountantId ? String(accountantId) : null,
+        declarationUrl: fileUrl ?? "",
+      })
+      .returning();
+
+    // Notify n8n webhook with the uploaded file info
+    try {
+      const response = await fetch(
+        "https://n8n.almabrava.xyz/webhook-test/455c390d-4f1d-4b4f-877e-ce796fd86323",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            propertyId,
+            filePath: fileUrl,
+            publicUrl,
+            fileName,
+          }),
+        }
+      );
+      if (!response.ok) {
+        console.error("Failed to notify n8n webhook", response.statusText);
+      } else {
+        console.log("n8n webhook notified successfully");
+      }
+    } catch (err) {
+      console.error("Failed to notify n8n webhook", err);
+    }
+
+    // Redirect after n8n response (success or failure)
+    redirect(`/property/${property.id}`);
+  } else {
+    // No file uploaded - create property and redirect immediately
+    const [property] = await db
+      .insert(properties)
+      .values({
+        name: propertyName,
+        type: propertyType,
+        managerId: managerId ? String(managerId) : null,
+        accountantId: accountantId ? String(accountantId) : null,
+        declarationUrl: fileUrl ?? "",
+      })
+      .returning();
+
+    redirect(`/property/${property.id}`);
   }
-
-  const [property] = await db
-    .insert(properties)
-    .values({
-      id: propertyId,
-      name: propertyName,
-      type: propertyType,
-      managerId: managerId ? String(managerId) : null,
-      accountantId: accountantId ? String(accountantId) : null,
-      declarationUrl: fileUrl,
-    })
-    .returning();
-
-  redirect(`/property/${property.id}`);
 };
 
 export const getUserNameById = async (id: string): Promise<string> => {

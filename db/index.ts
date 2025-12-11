@@ -40,6 +40,9 @@ function getDb() {
       ssl: "require",
       onnotice: () => {},
       prepare: false,
+      connection: {
+        statement_timeout: 10000, // 10 seconds
+      },
     });
 
     dbInstance = drizzle(client);
