@@ -180,6 +180,9 @@ function FormFields({
           onChange={(e) => setHasFile((e.target.files?.length ?? 0) > 0)}
           disabled={pending}
         />
+        <p className="text-xs text-muted-foreground">
+          This will take a moment to process.
+        </p>
       </div>
     </>
   );
