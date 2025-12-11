@@ -21,6 +21,7 @@ const sanitizeFileName = (name: string) =>
     .replace(/^_+|_+$/g, "");
 export const fetchProperties = async () => {
   const propertiesData = await db.select().from(properties);
+  console.log("propertiesData", propertiesData);
   return propertiesData;
 };
 
