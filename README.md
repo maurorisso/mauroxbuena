@@ -35,7 +35,6 @@ n8n is used as a document processing pipeline for Teilungserklärung (declaratio
 
    <img width="1187" height="649" alt="image" src="https://github.com/user-attachments/assets/9b3066c6-2c6c-4798-a4a7-628a107a9c16" />
 
-
 ## Project Structure
 
 ```

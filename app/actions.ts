@@ -6,6 +6,7 @@ import { units } from "@/db/schemas/units";
 import { users, type User } from "@/db/schemas/users";
 import { eq, inArray, and } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
 import { v4 as uuidv4 } from "uuid";
 import { N8nWebhookData } from "@/types";
@@ -165,6 +166,42 @@ export const getUnitsByPropertyId = async (propertyId: string) => {
     .where(eq(buildings.propertyId, propertyId));
 
   return unitsData.map((item) => item.units);
+};
+
+export const deleteProperty = async (propertyId: string): Promise<void> => {
+  // Get property to check for files
+  const [property] = await db
+    .select()
+    .from(properties)
+    .where(eq(properties.id, propertyId));
+
+  // Delete files from Supabase storage if they exist
+  if (property?.declarationUrl) {
+    try {
+      const supabase = await createClient();
+      // Extract the folder path (propertyId)
+      const folderPath = propertyId;
+      // List all files in the property folder
+      const { data: files } = await supabase.storage
+        .from("reports")
+        .list(folderPath);
+
+      if (files && files.length > 0) {
+        // Delete all files in the folder
+        const filePaths = files.map((file) => `${folderPath}/${file.name}`);
+        await supabase.storage.from("reports").remove(filePaths);
+      }
+    } catch (error) {
+      console.error("Failed to delete files from storage:", error);
+      // Continue with property deletion even if file deletion fails
+    }
+  }
+
+  // Delete the property (buildings and units will be cascade deleted)
+  await db.delete(properties).where(eq(properties.id, propertyId));
+
+  // Revalidate the properties page to refresh the list
+  revalidatePath("/");
 };
 
 export const processN8nWebhookData = async (
