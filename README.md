@@ -33,6 +33,9 @@ n8n is used as a document processing pipeline for Teilungserklärung (declaratio
 3. **Data Processing**: Cleans and structures the AI response into valid JSON format
 4. **Response**: Returns structured data back to the application, which automatically creates buildings and units in the database
 
+   <img width="1187" height="649" alt="image" src="https://github.com/user-attachments/assets/9b3066c6-2c6c-4798-a4a7-628a107a9c16" />
+
+
 ## Project Structure
 
 ```
